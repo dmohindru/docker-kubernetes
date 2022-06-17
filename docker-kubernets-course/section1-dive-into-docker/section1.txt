@@ -1,0 +1,48 @@
+What is Docker?
+Docker is a platform or ecosystem around creating and running containers
+It an ecosystem with following components
+- Docker Client
+- Docker Server
+- Docker Machine
+- Docker Images
+- Docker Hub
+- Docker Compose
+
+What is an image?
+Single file with all the deps and config required to run a program
+Image consists of broadly two component
+1. File System snaphot
+2. Startup Command
+
+What is a container?
+Its a instance of an image. Runs a program. An isolated machine with its own set of resources (harddrive, cpu, memory, network, etc)
+
+What Docker for Mac consists of?
+Docker Client: Tool (Docker CLI) that we are going to issue command to Docker Server (Docker Daemon)
+
+Docker Server: Tool that is responsible for creating images, running containers, etc 
+
+Docker Client (via CLI) ------> Docker Server
+
+Meaning of this docker command?
+# docker run hello-world
+This command spins up a container with an image hello-world
+
+What are the series of steps followed with below command is issued?
+# docker run hello-world
+
+Steps
+1. This comamnd is read by docker client and sent to docker server. Basically terminal docker command is a docker client.
+2. Docker server then checks for the image called hello-world in its local cache.
+3. If an image hello-world is not found in local chache then this image is pulled from docker-hub, a free cloud server which host public images that can be download and run on local computer. Docker server then caches this image locally.
+4. Docker server then spin up a new container with this image.
+5. Container then does its work according to image.
+
+Some important key terms very specific to Linux OS
+1. Namespacing: Isolating resources per process (or group of process). For example isolating a portion of hard disk for an exclusive use of a process.
+2. Contol Group: Limit the amount of resources used per process. For example limiting Memory, CPU Usage, HD I/O, Network Bandwidth to a process or group of process.
+
+Important
+When a docker server is running on your computer say Mac. Then actually its running a linux OS in a virtual machine. Examine the content under Server section of following command.
+# docker version
+you will find this info "OS/Arch: linux/amd64"
