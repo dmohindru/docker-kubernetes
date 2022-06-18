@@ -1,0 +1,71 @@
+Docker run command variation
+-----------------------------
+# docker run <image name> <command!>
+here <command!> overrides the default command that comes with docker image.
+e.g. docker run busybox echo Hi there
+Explanation: Here we are running an image busybox and in this image we are running command 'echo Hi there'.
+
+List all running containers
+---------------------------
+# docker ps
+
+List all the container that have ever been created
+--------------------------------------------------
+# docker ps --all
+
+Life cycle of a container
+-------------------------
+# docker run <image name> 
+Above command create a container and starts a container. Essentially
+docker run = docker create + docker start
+Format of create and start commands as below
+# docker create <image name>
+eg. docker create hello-world
+# docker start <container id>
+eg. docker start -a <container id>. Here -a command line argument is asking docker to attach the output of container to the current terminal.
+
+We can run any previously created container by running below command
+docker start -a <previously created container id>
+However in this approach we cannot replace a default command of a container with container was created.
+***For example we cannot do this***
+docker run busybox echo Hi there
+---After docker container exited---
+docker start -a <previous container id> echo bye there
+
+Removing Stopped Containers
+---------------------------
+docker system prune
+
+Get logs from a container
+-------------------------
+docker logs <container id>
+As previously seen running command
+# docker start <container id>
+does not print any output to console of that container. We can use 
+# docker logs <container id> 
+to retrieve logs of previously executed docker container. 
+Important thing to remember docker logs command does not execute any container what so ever. It just retrieves the logs.
+
+Stop a running container
+------------------------
+# docker stop <container id>
+Above command send the SIGTERM system message to primary running process in that container. Which essentially give running process some time to terminate gracefully. If the primary process doesn't stops in 10 seconds then docker fallbacks to KILL command to terminate the running process.
+
+# docker kill <container id>
+Above command send the SIGKILL system message to primary running process in that container. Which essentially terminate a running process immediately.
+
+Execute commands in Running Containers
+--------------------------------------
+# docker exec -it <container id> <command>
+Here -it option is combination of -i -t.
+-i option specifies to direct input of terminal to standard input of a process running.
+-t option specifies to format the process output text when displaying to the terminal.
+
+Connect to a terminal of a running container
+--------------------------------------------
+# docker exec -it <container id> sh
+Here sh can be replaced by any shell program like bash/zsh etc.
+
+One important thing to remember you can also run a shell program when a new instance of container is created with docker run command eg.
+docker run -it <image name> sh
+In this approach we are overriding default command of a container. So its highly suggested that we connect to terminal of running container via docker exec command.
