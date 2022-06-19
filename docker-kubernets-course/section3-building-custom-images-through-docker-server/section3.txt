@@ -66,3 +66,59 @@ Step 3 [CMD ["redis-server"]]
 3.2: It update the temporary image file created in step 2.3 which in this case file will be a final image.
 
 Essentially docker server works on temporary images created in previous steps updated it in current steps and create a temporary image to be used in any subsequent steps. 
+
+Rebuilding from cached containers
+---------------------------------
+Docker server always caches the intermediate result while building any image from Dockerfile. As an instance say we have a modification in our Dockerfile as below
+
+FROM alpine
+RUN apk add --update redis
+RUN apk add --update gcc
+CMD ["redis-server"]
+
+If we build a docker image from this Dockerfile. Docker will reuse intermediate images from previous build for 
+Step 1: FROM alpine
+Step 2: RUN apk add --update redis
+
+However if the order of RUN command in Dockerfile were swapped like below
+FROM alpine
+RUN apk add --update gcc
+RUN apk add --update redis
+CMD ["redis-server"]
+
+In this build Docker server will only reuse intermediate images from following steps
+Step1: FROM alpine
+
+CRUX: Order of commands matter in Dockerfile will have affect on efficiency of docker build process.
+
+Tag an image during docker build
+--------------------------------
+# docker build -t <you docker id>/<image name>:<version> .
+eg.
+# docker build -t dmohindru/redis:latest .
+Note: tag format in above command is just a convention everybody uses
+
+Docker commit command
+---------------------
+Disclaimer: You would not be required to use commit command that often. The process below shows how to create and image from a running container.
+
+General steps are
+1. Spin up a container from any existing image.
+2. Install any dependencies as required.
+3. Use docker ps command to get an id of running container
+4. Use docker commit command to specify a process/command that this container should execute on its startup.
+
+Step1:
+# docker run -it alpine sh
+Step2: execute this command inside a running container
+# apk add --update redis
+Step3: execute this command from a different terminal
+# docker ps
+Step4: execute this command from a different terminal
+# docker commit -c 'CMD ["redis-server"]' <id of container>
+Above command will generate an image with an id
+
+Now we can run this newly generated image with normal docker run command as
+# docker run <id of new image>
+
+
