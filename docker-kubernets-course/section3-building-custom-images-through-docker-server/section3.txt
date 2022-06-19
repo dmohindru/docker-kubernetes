@@ -1,0 +1,68 @@
+Custom docker image work flow
+------------------------------
+1. We always start by writing Dockerfile
+2. Dockerfile is passed on to Docker client (Docker CLI)
+3. Docker client then pass on the command/Dockerfile to Docker Server
+4. Docker server the creates an Usable docker image.
+
+Creating a docker image (content of Dockerfile)
+-----------------------------------------------
+1. Specify a base image
+2. Run some commands to install additional programs
+3. Specify a command to run on container startup
+
+Refer to folder ./redis-image to create custom image 
+To create a docker image navigate to folder containing Dockerfile and issue following command
+# docker build .
+
+
+Analogy for a Dockerfile
+------------------------
+Writing a dockerfile == Being given a computer with no OS and being told to install Chrome
+Some of the possible steps that need to be followed
+1. Install an Operation system
+2. Start up you default browser
+3. Navigate to chrome.google.com
+4. Download installer
+5. Open file/folder explorer
+6. Execute chrome_install.exe
+7. Execute chrome.exe
+Here above steps can be categorized as
+Step 1: Specify a base image
+Step 2-6: Run command to install additional programs
+Step 7: Command to run on startup
+
+
+Dockerfile Teardown
+-------------------
+Basic format of command in Dockerfile is of from
+
+<some instruction to docker server> <argument to instruction>
+e.g.
+FROM alpine 
+This command instructs Docker server to pull an image called alpine from some cloud source like Docker hub
+RUN apk add --update redis
+This command instructs Docker server to install redis server in previously pull image alpine
+CMD ["redis-server"]
+This command instructs Docker server to run this command when a container is created from this image
+
+Sequence of steps Docker server when building an image
+-------------------------------------------------------
+Lets say this a our Dockerfile
+FROM alpine
+RUN apk add --update redis
+CMD ["redis-server"]
+
+Step 1 [FROM alpine]: 
+1.1: When docker server sees this command it first check its local cache if this image is present. If not then it pull this image from docker hub
+
+Step 2 [RUN apk add --update redis]: 
+2.1: Docker now check its previous step and find that an image is downloaded. So it spin up a temporary container so that a change can be made in its file system snapshot. 
+2.2: It then executes apk command to install redis server in containers file system.
+2.3: It then terminated this container and create a temporary image that can be used in any subsequent step. 
+
+Step 3 [CMD ["redis-server"]]
+3.1: Docker server now spins up an temporary container created from temporary image in step 2.3 and specify command that need to be executed when a container is created from an image file.
+3.2: It update the temporary image file created in step 2.3 which in this case file will be a final image.
+
+Essentially docker server works on temporary images created in previous steps updated it in current steps and create a temporary image to be used in any subsequent steps. 
