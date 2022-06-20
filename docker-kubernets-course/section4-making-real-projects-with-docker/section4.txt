@@ -1,0 +1,23 @@
+Steps to create a container for any application (NodeJS/Java)
+-------------------------------------------------------------
+1. Create an application (NodeJs/Java)
+2. Create a Dockerfile
+3. Build image from Dockerfile
+4. Run image as container
+5. Connect to app
+
+Copy build files from local development machine to a Docker image
+-----------------------------------------------------------------
+Specify below command in Dockerfile
+COPY <path to folder to copy from local machine> <path to folder to copy to inside a container>
+
+Port mapping
+------------
+docker run -p <port on local computer>:<port inside a container> <image id>
+
+Specify a working directory inside a container
+----------------------------------------------
+Specify below command in Dockerfile
+WORKDIR /usr/app
+
+IMPORTANT: Refer to Dockerfile of this section to see and example of minimizing Cache Busting and Rebuilds
