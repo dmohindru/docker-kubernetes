@@ -1,0 +1,16 @@
+version: '3'
+# services section specifies all the components that are required for
+# this application to run
+services:
+  # This configuration tell docker compose to spin up a container from redis image
+  # Essentially this config is something like 'docker run redis' command
+  redis-server:
+    image: 'redis'
+  # This configuration tells docker compose to 
+  # 1. First build a docker image from a Dockerfile with path specified in build section
+  # 2. Map port local machine port 4001 to 8081 of container running an application
+  #    Notice here - is a syntax to declare an array in a yml file
+  node-app:
+    build: .
+    ports:
+      - "4001:8081"
