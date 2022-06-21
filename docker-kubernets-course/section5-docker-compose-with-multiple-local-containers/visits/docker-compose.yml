@@ -10,7 +10,9 @@ services:
   # 1. First build a docker image from a Dockerfile with path specified in build section
   # 2. Map port local machine port 4001 to 8081 of container running an application
   #    Notice here - is a syntax to declare an array in a yml file
+  # 3. For this container apply 'always' restart policy
   node-app:
+    restart: always
     build: .
     ports:
       - "4001:8081"

@@ -23,3 +23,31 @@ node-app
 Important:
 1. Refer to docker-compose.yml file of this section to see example and explanation of each section.
 2. Refer to comments in index.js file line 5-6 which explanation how to specify an address of a service required by an app which is managed by docker compose.
+
+Docker compose commands
+------------------------
+Important: All these command should be executed from a folder containing docker-compose.yml file
+
+Launch multiple container with docker-compose
+# docker-compose up
+
+First build an image and then Launch multiple container with docker-compose
+# docker-compose up --build
+
+Launch multiple containers in background
+# docker-compose up -d
+
+Stop containers
+# docker-compose down
+
+View status of running containers in a docker compose
+# docker-compose ps
+
+Docker compose Restart Policy
+-----------------------------
+See docker-compose.yml file of this section to see usage of restart policy
+
+- "no" (default): Never attempt to restart this container if it stops or crashes. Notice inverted commas around no it is required for a valid yml file. 
+- always: If this container stops *for any reason* always attempt to restart it
+- on-failure: Only restart if the container stops with an error code
+- unless-stopped: Always restart unless we (the developers) forcibly stop it
