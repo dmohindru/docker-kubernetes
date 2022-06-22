@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    # We need to use following config for a build section since we don't have a default Dockerfile in our build context
+    # This section of config is equivalent to -f option of docker run command
+    build:
+      # This option tell docker from where to pull files for docker image
+      context: .
+      # This option as quite obvious specifies a custom named Dockerfile
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # This is equivalent to -v /app/node_modules flag of docker run command
+      - /app/node_modules
+      # This is equivalent to -v $(pwd):/app flag of docker run command
+      - .:/app
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - .:/app
+    # This option specifies what should be start up command when a container this container is started
+    command: ["npm", "run", "test"]

@@ -15,8 +15,32 @@ Its an iterative process with below steps in order
   3.2 Run Tests
   3.3 Deploy to AWS Elastic Beanstalk
 
-Command to create react front-end app 'frontend'
-------------------------------------------------
+Command related to react front-end app
+---------------------------------------
+Create react app
 # npx create-react-app frontend
+
+Run tests
+# npm run test
+
+Start app for local development
+# npm run start
+
+Build app for production deployment
+# npm run build
+
+Docker volumes
+--------------
+# docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <image_id>
+Little bit of explanation about -v flag
+-v flag is used to mount a directory in a local computer to a directory inside a container.
+eg. -v $(pwd):/app 
+This options maps the current working directory to a /app directory inside a container
+However if : is missing in -v flag then this is message to docker to not map a given directory inside a container to any directory in local computer
+eg. -v /app/node_modules
+Tell Docker not to map this directory to any folder on a local computer
+
+Important: See docker-compose.yml file for a work around of specifying -v and -f options in docker run command
+
 
 

@@ -15,6 +15,11 @@ Refer to folder ./redis-image to create custom image
 To create a docker image navigate to folder containing Dockerfile and issue following command
 # docker build .
 
+To create a docker image from the file that is not named as Dockerfile issue following command
+# docker build -f <custom docker build file> .
+e.g.
+# docker build -f Dockerfile.dev . 
+
 
 Analogy for a Dockerfile
 ------------------------
