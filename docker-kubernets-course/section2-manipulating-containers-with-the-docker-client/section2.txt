@@ -66,6 +66,9 @@ Connect to a terminal of a running container
 # docker exec -it <container id> sh
 Here sh can be replaced by any shell program like bash/zsh etc.
 
+Attach terminal to any running docker container
+# docker attach <container id>
+
 One important thing to remember you can also run a shell program when a new instance of container is created with docker run command eg.
 docker run -it <image name> sh
 In this approach we are overriding default command of a container. So its highly suggested that we connect to terminal of running container via docker exec command.
