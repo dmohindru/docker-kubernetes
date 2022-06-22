@@ -1,0 +1,22 @@
+Typical application development and deployment workflow
+-------------------------------------------------------
+Its an iterative process with below steps in order
+1. Development
+  1.1 Create/change features branch
+  1.2 Make changes on a non-master branch
+  1.3 Push to github
+  1.4 Create Pull request to merge with master
+2. Testing
+  2.1 Code pushed to Travis CI (or any other CI provider for that matter)
+  2.2 Run Tests
+  2.3 Merge PR with master
+3. Deployment
+  3.1 Code pushed to Travis CI (or any other CI provider for that matter)
+  3.2 Run Tests
+  3.3 Deploy to AWS Elastic Beanstalk
+
+Command to create react front-end app 'frontend'
+------------------------------------------------
+# npx create-react-app frontend
+
+
