@@ -32,15 +32,15 @@ What are the series of steps followed with below command is issued?
 # docker run hello-world
 
 Steps
-1. This comamnd is read by docker client and sent to docker server. Basically terminal docker command is a docker client.
+1. This command is read by docker client and sent to docker server. Basically terminal docker command is a docker client.
 2. Docker server then checks for the image called hello-world in its local cache.
-3. If an image hello-world is not found in local chache then this image is pulled from docker-hub, a free cloud server which host public images that can be download and run on local computer. Docker server then caches this image locally.
+3. If an image hello-world is not found in local cache then this image is pulled from docker-hub, a free cloud server which host public images that can be download and run on local computer. Docker server then caches this image locally.
 4. Docker server then spin up a new container with this image.
 5. Container then does its work according to image.
 
 Some important key terms very specific to Linux OS
 1. Namespacing: Isolating resources per process (or group of process). For example isolating a portion of hard disk for an exclusive use of a process.
-2. Contol Group: Limit the amount of resources used per process. For example limiting Memory, CPU Usage, HD I/O, Network Bandwidth to a process or group of process.
+2. Control Group: Limit the amount of resources used per process. For example limiting Memory, CPU Usage, HD I/O, Network Bandwidth to a process or group of process.
 
 Important
 When a docker server is running on your computer say Mac. Then actually its running a linux OS in a virtual machine. Examine the content under Server section of following command.
