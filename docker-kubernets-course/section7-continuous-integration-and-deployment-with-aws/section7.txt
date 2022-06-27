@@ -1,0 +1,22 @@
+Services used in this section to demo CI/CD for an application using docker
+---------------------------------------------------------------------------
+1. Github
+2. Travis CI
+3. AWS
+
+Using this repo for this example
+https://github.com/dmohindru/docker-react
+
+Travis CI Flow
+--------------
+Laptop  ---Push---> Github -----> Travis -----> Travis does work
+1. We push code from our development machine to github.
+2. Github connects to Travis and notifies as new code change has occurred.
+3. Travis does its work based on .travis.yml file
+
+Steps for .travis.yml file
+--------------------------
+1. Tell Travis we need a copy of docker running.
+2. Build our image using Dockerfile.dev
+3. Tell Travis how to run our test suite.
+4. Tell travis how to deploy our code to AWS.
