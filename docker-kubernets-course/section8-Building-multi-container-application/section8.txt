@@ -1,0 +1,6 @@
+This section is all about creating a fibonacci series calculator app which will demo the use of multiple container application development and deployment in section 8 and 9.
+
+Refer to png files in this folder for 
+1. Application architecture (application-architecture.png)
+2. Application User Interface (application-ui.png)
+3. Container interaction of this application (container-interaction.png)
