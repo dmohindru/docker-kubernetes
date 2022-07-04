@@ -1,0 +1,23 @@
+This this section we will make docker file for following applications
+---------------------------------------------------------------------
+1. React application
+2. Express Server
+3. Worker
+
+Various techniques to specify environment variables for docker container from docker-compose file
+-------------------------------------------------------------------------------------------------
+1. variableName=value
+This sets a variable in the container at run time
+2. variableName
+This seta a variable in the container at run time and value is taken from your computer (more secure)
+
+Nginx config files
+------------------
+We can specify custom behavior of Nginx with a default.conf file. Like for our example we can specify following logic.
+Upstream servers
+1. Tell Nginx that there is an 'upstream' server at client:3000
+2. Tell Nginx that there is an 'upstream' server at server:5000
+Behavior 
+1. Listen on port 80
+2. If anyone comes to '/' send them to client upstream.
+3. If anyone comes to '/api' send them to server upstream.
