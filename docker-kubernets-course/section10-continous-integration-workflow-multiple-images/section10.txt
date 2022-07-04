@@ -1,0 +1,18 @@
+Multi container deployment workflow
+-----------------------------------
+1. Push code to github.
+2. Travis automatically pulls repo.
+3. Travis builds a test image, test code.
+4. Travis builds prod images.
+5. Travis pushes build prod images to Docker Hub.
+6. Travis pushes project to AWS EB. This step only notifies EB that new images are available on Docker HUB.
+7. EB pulls images from Docker Hub, deploys.
+
+Steps to specify in Travis config file for multi container deployment
+----------------------------------------------------------------------
+1. Specify docker as a dependency.
+2. Build test version of React project.
+3. Run tests.
+4. Build production version of all projects.
+5. Push all to docker hub.
+6. Tell Elastic Beanstalk to update
