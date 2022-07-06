@@ -1,0 +1,6 @@
+Deploying multi container app to AWS Beanstalk
+----------------------------------------------
+1. We need to create a file Dockerrun.aws.json file
+2. This file would contain instruction called container definition how to pull docker images from Dockerhub run those images.
+3. Behind the seen AWS Beanstalk does't know how to run docker images but rather delegates this task to Amazon Elastic Container Service (ECS)
+4. ECS need task definition for each docker container it need to run.
