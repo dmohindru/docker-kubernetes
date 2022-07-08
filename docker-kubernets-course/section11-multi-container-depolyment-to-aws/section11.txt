@@ -4,3 +4,23 @@ Deploying multi container app to AWS Beanstalk
 2. This file would contain instruction called container definition how to pull docker images from Dockerhub run those images.
 3. Behind the seen AWS Beanstalk does't know how to run docker images but rather delegates this task to Amazon Elastic Container Service (ECS)
 4. ECS need task definition for each docker container it need to run.
+
+AWS Elastic Cache features
+---------------------------
+1. Automatically creates and maintains Redis instances for you.
+2. Super easy to scale.
+3. Built in logging + maintenance.
+4. Probably better security than what we can do.
+5. Probably better security than what we can do.
+6. Easier to migrate off of EB with.
+
+AWS Relational Database features
+---------------------------------
+1. Automatically creates and maintains Postgres instances for you.
+2. Super easy to scale.
+3. Built in logging + maintenance
+4. Probably better security than what we can do.
+5. Automated backups and rollbacks.
+6. Easier to migrate off of EB with.
+
+IMPORTANT: Please refer to cheat sheet cheat-sheets/aws-config-multi-container-cheat-sheet.txt for complete steps to deploy multi-container application to aws.
