@@ -28,3 +28,15 @@ Local Kubernetes Development workflow
 2. Install a VM driver virtualbox: Used to make a VM that will be your single node.
 3. Install minikube: Runs a single node on that VM.
 
+Mapping knowledge of Docker Compose and Kubernetes
+---------------------------------------------------
+Docker Compose
+  1. Each entry can optionally get docker-compose to build an image.
+  2. Each entry represents a container we want to create.
+  3. Each entry defines the networking requirements (ports).
+Kubernetes
+  1. Kubernetes expects all images to already be built. Make sure our image is hosted on docker hub.
+  2. One config file per object we want to create. Make one config file to create the container.
+  3. We have to manually set up all networking. Make one config file to set up networking.
+
+
