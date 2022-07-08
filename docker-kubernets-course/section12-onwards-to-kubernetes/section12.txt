@@ -1,0 +1,30 @@
+What is Kubernetes?
+-------------------
+System for running many different containers over multiple different machines.
+
+Why use Kubernetes?
+-------------------
+When you need to run many different containers with different images.
+
+Working with Kubernetes in Development vs Production
+-----------------------------------------------------
+Development
+- minikube
+
+Production
+- Managed solutions
+  - Amazon Elastic Container Service for Kubernetes (EKS)
+  - Google Cloud Kubernetes Engine (GKE)
+- Do it yourself
+
+Components of minikube
+----------------------
+- minikube: Use to managing the VM itself
+- kubectl: Use for managing containers in the node
+
+Local Kubernetes Development workflow
+-------------------------------------
+1. Install Kubectl: CLI for interacting with our master.
+2. Install a VM driver virtualbox: Used to make a VM that will be your single node.
+3. Install minikube: Runs a single node on that VM.
+

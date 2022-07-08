@@ -1,0 +1,48 @@
+Updated Minikube Install and Setup Info - macOS
+2-22-2021
+
+In the upcoming lecture, we will set up and install Minikube using Homebrew. The installation instructions have changed slightly. If you are already using Docker Desktop's Kubernetes, you do not need Minikube and these instructions can be skipped.
+
+Install Minikube with Homebrew
+
+First, make sure you have Homebrew installed. If not, follow the instructions here:
+
+https://brew.sh/
+
+Then, in your terminal, run:
+
+brew install minikube
+
+Your output should look something like this (it will be ok if it is not exact)
+
+Install Minikube Directly
+
+If you do not wish to use Homebrew, you can use cURL to download the binaries.
+
+In your terminal, run:
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+
+sudo install minikube-darwin-amd64 /usr/local/bin/minikube
+
+Starting Minikube and Testing Installation
+
+After you have successfully installed Minikube we need to start and test the cluster to make sure everything is working correctly.
+
+1. Start with VM driver:
+In your terminal, run:
+# minikube start --driver=hyperkit
+Your output should look similar to this:
+Note - It is very important to use a vm driver like hyperkit. If you do not pass a driver flag to the start command Minikube will use the docker driver instead. This will not match what is shown in the course and will not work with an ingress (used later).
+https://minikube.sigs.k8s.io/docs/drivers/docker/#known-issues
+
+2. Check Minikube Status
+After you see a Done! message in your terminal, run 
+# minikube status 
+to make sure the cluster is healthy. Pay particular attention that the apiserver is in a "Running" state.
+
+3. Check kubectl
+Lastly, open up your terminal and make sure that you can run 
+# kubectl version
+
+Note - the client and server can be off by one minor version without error or issue.
