@@ -36,7 +36,45 @@ Docker Compose
   3. Each entry defines the networking requirements (ports).
 Kubernetes
   1. Kubernetes expects all images to already be built. Make sure our image is hosted on docker hub.
-  2. One config file per object we want to create. Make one config file to create the container.
+  2. One config file per 'Object' we want to create. Make one config file to create the container.
   3. We have to manually set up all networking. Make one config file to set up networking.
+
+Components of config files
+--------------------------
+
+=> apiVersion
+Each API version defines a different set of 'objects' we can use
+- apiVersion: v1
+  - componentStatus
+  - configMap
+  - Endpoints
+  - Event
+  - Namespace
+  - Pod
+- apiVersion: apps/v1
+  - ControllerRevision
+  - StatefulSet
+
+
+=> kind(object)
+Object can be of type (not exhaustive)
+1. StatefulSet
+
+2. ReplicaController
+
+3. Pod: This object is used to create a container. In Kubernetes world we cannot create a container by itself. So Pod is the smallest deployable unit in Kubernetes. And Pod is essentially a group of containers with similar purpose. Eg.
+Lets assume we have a Pod with three containers
+  - postgres (Primary container): A regular postgres RDBMS system.
+  - logger (support container): A container that supports database logging activity.
+  - backup-manager (support container): A container that supports data backup service for postgres container.
+
+4. Service: This object is used to setup a networking in Kubernetes Cluster. Basically it acts as a communication layer between outside with and pods in Node (VM created by Minikube).
+ Type of service objects
+  - ClusterIP
+  - NodePort: Exposes a container to the outside world (only good for dev purposes!!!)
+  - LoadBalancer
+  - Ingress
+
+
 
 
