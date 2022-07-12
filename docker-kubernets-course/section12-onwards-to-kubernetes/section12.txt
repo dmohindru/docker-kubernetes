@@ -76,5 +76,68 @@ Lets assume we have a Pod with three containers
   - Ingress
 
 
+kubectl commands
+----------------
+Feed a config file to kubectl
+# kubectl apply -f <filename>
+e.g
+kubectl apply -f client-pod.yml
+kubectl apply -f client-node-port.yml
 
+Print the status of all running pods
+# kubectl get pods
 
+Print the status of all running service objects
+# kubectl get services
+
+Deployment flow
+---------------
+1. Deployment File: List of pods and services that need to be deployed onto Kubernetes cluster.
+2. Master: From deployment file master gets its set of responsibility to take care of like making sure certain number of containers are always running. It constantly polls all the node about the status of container they are running.
+3. Node (A computer): 
+  3.1. Its the node which runs actual containers
+  3.2. It receives command from master what it need to do with lifecycle of a container.
+  3.3. Each node as its own copy of Docker program running.
+  3.4. Each node uses its Docker program to pull images from docker hub and maintains its local cache of docker images.
+  3.5. Each node uses its Docker program to maintain a lifecycle of a docker container.
+  3.6. Each node responds to requests made by master about the status of containers it is running.
+
+Refer to diagram kubernetes-compete-deployment-flow.png for visual illustration of above explanation. 
+
+Important Takeaways
+-------------------
+1. Kubernetes is a system to deploy containerized apps.
+2. Nodes are individual machines (or VM's) that run containers.
+3. Masters are machines (or VM's) with a set of programs to manage nodes.
+4. Kubernetes didn't build our images - it got them from somewhere else.
+5. Kubernetes (the master) decided where to run each container - each node can run a dissimilar set of containers.
+Important stuff
+6. To deploy something, we update the desired state of the master with a config file.
+7. The master works constantly to meet your desired state. 
+
+Type of deployments
+-------------------
+1. Imperative Deployment: Do exactly these steps to arrive at this container setup.
+2. Declarative Deployment: Our container setup should look like this, make it happen.
+
+Example of Imperative approach
+------------------------------
+1. Create 3 containers using the multi-worker image.
+2. Make another 2 containers with multi-worker.
+3. Delete 1 container running multi-worker.
+4. Those X number of containers should be networked to multi-redis.
+5. Those X number of containers should be updated to use multi-redis v1.23
+
+Example of Declarative approach
+-------------------------------
+1. There should be 3 containers using multi-worker.
+2. There should be 5 containers using multi-worker.
+3. There should be 4 containers using multi-worker.
+4. There should be 4 containers using multi-worker networked to multi-redis.
+5. There should be 4 containers using multi-worker using V.123 networked to multi-redis.
+
+Important
+---------
+Kubernetes has command for both DECLARATIVE and IMPERATIVE approach.
+
+In this course and mostly in production environment we will be using DECLARATIVE approach.
