@@ -62,7 +62,7 @@ Object can be of type (not exhaustive)
 
 2. ReplicaController
 
-3. Pod: This object is used to create a container. In Kubernetes world we cannot create a container by itself. So Pod is the smallest deployable unit in Kubernetes. And Pod is essentially a group of containers with similar purpose. Eg.
+3. Pod: This object is used to create a container. Runs one or more closely related containers. In Kubernetes world we cannot create a container by itself. So Pod is the smallest deployable unit in Kubernetes. And Pod is essentially a group of containers with similar purpose. Eg.
 Lets assume we have a Pod with three containers
   - postgres (Primary container): A regular postgres RDBMS system.
   - logger (support container): A container that supports database logging activity.
@@ -74,6 +74,8 @@ Lets assume we have a Pod with three containers
   - NodePort: Exposes a container to the outside world (only good for dev purposes!!!)
   - LoadBalancer
   - Ingress
+
+5. Deployment: Maintains a set of identical pods, ensuring that they have the correct config and that the right number exists.
 
 
 kubectl commands
@@ -87,9 +89,28 @@ kubectl apply -f client-node-port.yml
 Print the status of all running pods
 # kubectl get pods
 
+Print the status of all running deployments
+# kubectl get deployments
+
 Print the status of all running service objects
 # kubectl get services
 
+Apply changes to running system
+# kubectl apply -f <update_yml_file>
+
+Get detailed info about an object
+# kubectl describe <object type> <object name>
+e.g.
+# kubectl describe pod client-pod
+
+Remove an object
+# kubectl delete -f <config_file>
+config_file is the file that created this object
+
+Imperative command to update image
+# kubectl set image <object_type>/<object_name> <container_name>=<new image to use>
+e.g.
+# kubectl set image deployment/client-deployment client=dmohindru/multi-client:v5
 Deployment flow
 ---------------
 1. Deployment File: List of pods and services that need to be deployed onto Kubernetes cluster.

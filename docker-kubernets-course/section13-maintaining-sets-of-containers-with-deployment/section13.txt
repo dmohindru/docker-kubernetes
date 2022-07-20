@@ -1,0 +1,41 @@
+We cannot change the all the configuration of running Pod object. Below is list of Pod properties than can or cannot be changed
+Pod Config
+1. containers: can't be updated
+2. name: can't be updated
+3. port: can't be updated
+4. image: can be updated
+
+Differences between Pods and Deployment objects
+-----------------------------------------------
+Pods
+1. Runs a single set of containers
+2. Good for one-off dev purpose
+3. Rarely used directly in production
+
+Deployment
+1. Runs a set of identical pods (one or more)
+2. Monitors the state of each pod, updating as necessary
+3. Good for dev
+4. Good for production
+
+Problem statement
+-----------------
+Read kubernetes issue #33664 on github
+These is the workflow we wish to follow
+1. Update the multi-client (or any) image, push to Docker
+2. Get the deployment to recreate our pods with the latest version of multi-client (or any).
+
+We want to update our deployment with latest version of image recently pushed to Docker hub without changing deployment object config file.
+Explanation
+It is very very difficult to update the image of a running pod in kubernetes cluster. Possible solution to this problem even though each of them not very versatile.
+1. Manually delete pods to get the deployment to recreate them with the latest version.
+Explanation: Deleting pods manually seems silly. (DON'T DO THIS!!!!)
+
+2. Tag built images with a real version number and specify that version in the config file.
+Explanation: Adds an extra step in the production deployment process. Not a very friendly step.
+
+3. Use an imperative command to update the image version the deployment should use.
+Explanation: Uses an imperative command. Use this approach since this is the best of bad situation.
+For this approach (imperative command) we follow this workflow
+  3.1 Tag the image with a version number, push to docker hub
+  3.2 Run a 'kubectl' command forcing the deployment to use the new image version. Refer to section 12 notes file to see example of this imperative command.
