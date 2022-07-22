@@ -70,7 +70,7 @@ Lets assume we have a Pod with three containers
 
 4. Service: This object is used to setup a networking in Kubernetes Cluster. Basically it acts as a communication layer between outside with and pods in Node (VM created by Minikube).
  Type of service objects
-  - ClusterIP
+  - ClusterIP: Exposes a set of pods to only other objects in the cluster
   - NodePort: Exposes a container to the outside world (only good for dev purposes!!!)
   - LoadBalancer
   - Ingress
@@ -83,8 +83,11 @@ kubectl commands
 Feed a config file to kubectl
 # kubectl apply -f <filename>
 e.g
-kubectl apply -f client-pod.yml
-kubectl apply -f client-node-port.yml
+# kubectl apply -f client-pod.yml
+# kubectl apply -f client-node-port.yml
+
+Feed a group of config files to kubectl
+# kubectl apply -f <directory_to_config_files>
 
 Print the status of all running pods
 # kubectl get pods
@@ -106,6 +109,12 @@ e.g.
 Remove an object
 # kubectl delete -f <config_file>
 config_file is the file that created this object
+
+Delete a deployment
+# kubectl delete deployment <deployment_name>
+
+Delete a service
+# kubectl delete service <service_name>
 
 Imperative command to update image
 # kubectl set image <object_type>/<object_name> <container_name>=<new image to use>
