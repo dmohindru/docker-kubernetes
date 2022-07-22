@@ -92,6 +92,9 @@ Feed a group of config files to kubectl
 Print the status of all running pods
 # kubectl get pods
 
+Watch a log for any pod
+# kubectl logs <id_of_pod>
+
 Print the status of all running deployments
 # kubectl get deployments
 

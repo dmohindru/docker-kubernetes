@@ -4,3 +4,21 @@ Path to production deployment for kubernetes multi container application
 2. Test locally on minikube/kubernetes local instance
 3. Create a Github/Travis flow to build images and deployment
 4. Deploy app to a cloud provider
+
+Volume in generic container terminology
+----------------------------------------
+Some type of mechanism that allows a container to access a filesystem outside itself
+
+Volume in Kubernetes
+--------------------
+An object that allows a container to store data at the pod level
+
+Types of Volume objects in Kubernetes
+-------------------------------------
+1. Persistent Volume Claim: We want these
+
+2. Persistent Volume: We want these. Here we are creating some long term storage system which is not linked to a container or a pod. Very suitable scheme for pods running database containers where we need long term storage.
+
+3. Volume: We don't want this for data tat need to last. Basically volume is tied to a pod, so if containers are restarted in a pod then new containers will have access to old data worked on by previous container. However if a pod crashes we also loose data stored in a volume. This behavior make volume not suitable for pods running database containers where we need long term storage solutions.
+
+// TODO make a diagram for volume and Persistent volume schemes
