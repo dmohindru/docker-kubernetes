@@ -15,10 +15,10 @@ An object that allows a container to store data at the pod level
 
 Types of Volume objects in Kubernetes
 -------------------------------------
-1. Persistent Volume Claim: We want these
+1. Persistent Volume Claim: We want these. This is essentially we ask kubernetes we want this much storage (volumes) for our pod configurations. And kubernetes then provide us with either statically provisioned persistent volume or dynamically provisioned persistent volume (explained below)
+  1.1 Statically provisioned Persistent Volume: These are the kind of volumes that kubernetes has provisioned ahead of time. And if volume request matches these sizes its provided to a pod. 
+  1.2 Dynamically provisioned Persistent Volume: These are the kind of volumes that are provisioned on a demand basis. And provided back to requesting pod.
 
 2. Persistent Volume: We want these. Here we are creating some long term storage system which is not linked to a container or a pod. Very suitable scheme for pods running database containers where we need long term storage.
 
 3. Volume: We don't want this for data tat need to last. Basically volume is tied to a pod, so if containers are restarted in a pod then new containers will have access to old data worked on by previous container. However if a pod crashes we also loose data stored in a volume. This behavior make volume not suitable for pods running database containers where we need long term storage solutions.
-
-// TODO make a diagram for volume and Persistent volume schemes
