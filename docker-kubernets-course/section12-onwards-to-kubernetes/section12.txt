@@ -123,6 +123,17 @@ Imperative command to update image
 # kubectl set image <object_type>/<object_name> <container_name>=<new image to use>
 e.g.
 # kubectl set image deployment/client-deployment client=dmohindru/multi-client:v5
+
+Get persistent volume present in kubernetes
+# kubectl get storageclass
+
+Get persistent volumes present in kubernetes
+# kubectl get pv
+
+Get persistent volumes present claims in kubernetes
+# kubectl get pvc
+
+
 Deployment flow
 ---------------
 1. Deployment File: List of pods and services that need to be deployed onto Kubernetes cluster.

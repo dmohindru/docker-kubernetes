@@ -22,3 +22,9 @@ Types of Volume objects in Kubernetes
 2. Persistent Volume: We want these. Here we are creating some long term storage system which is not linked to a container or a pod. Very suitable scheme for pods running database containers where we need long term storage.
 
 3. Volume: We don't want this for data tat need to last. Basically volume is tied to a pod, so if containers are restarted in a pod then new containers will have access to old data worked on by previous container. However if a pod crashes we also loose data stored in a volume. This behavior make volume not suitable for pods running database containers where we need long term storage solutions.
+
+Persistent Volume Claim Access Modes
+------------------------------------
+1. ReadWriteOnce: Can be used by a single node.
+2. ReadOnlyMany: Multiple nodes can read from this.
+3. ReadWriteMany: Can be read and written to by many nodes.
