@@ -72,10 +72,15 @@ Lets assume we have a Pod with three containers
  Type of service objects
   - ClusterIP: Exposes a set of pods to only other objects in the cluster
   - NodePort: Exposes a container to the outside world (only good for dev purposes!!!)
-  - LoadBalancer
-  - Ingress
+  - LoadBalancer: Legacy way of getting network traffic into a cluster
+  - Ingress: Exposes a set of services to the outside world
 
 5. Deployment: Maintains a set of identical pods, ensuring that they have the correct config and that the right number exists.
+
+6. Secrets: Securely stores a piece of information in the cluster, such as a database password. Secret object are created manually by an imperative commands. Type of secret objects
+  - generic
+  - docker-register
+  - tls
 
 
 kubectl commands
@@ -132,6 +137,14 @@ Get persistent volumes present in kubernetes
 
 Get persistent volumes present claims in kubernetes
 # kubectl get pvc
+
+Get secret present in kubernetes
+# kubectl get secrets
+
+Imperative command to create a secret object
+# kubectl create secret <type_of_secret> <secret_name> --from-literal key=value
+e.g. # kubectl create secret generic pgpassword --from-literal PGPASSWORD=12345asdf
+
 
 
 Deployment flow

@@ -28,3 +28,6 @@ Persistent Volume Claim Access Modes
 1. ReadWriteOnce: Can be used by a single node.
 2. ReadOnlyMany: Multiple nodes can read from this.
 3. ReadWriteMany: Can be read and written to by many nodes.
+
+Imperative commands to create a Secret object
+---------------------------------------------
