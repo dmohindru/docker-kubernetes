@@ -1,0 +1,62 @@
+Two project implementing handling traffic in kubernetes cluster
+---------------------------------------------------------------
+1. ingress-nginx: We will be using this project, a community led project.
+github.com/kubernetes/ingress-nginx
+
+2. kubernetes-ingress: We will not be using this project, a project led by the company nginx
+github.com/nginxinc/kubernetes-ingress
+
+Important: Setup of ingress-nginx changes depending on your environment (local, GC, AWS, Azure). We are going to set up ingress-nginx on local and GC
+
+Mandatory imperative command to run before deploying ingress service on any host
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+
+
+Docker Desktop's Kubernetes Dashboard
+-------------------------------------
+
+Grab the most current script from the install instructions:
+https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/#deploying-the-dashboard-ui
+
+1. Apply this config file to kubernetes cluster
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+
+2. Create a dash-admin-user.yaml
+-------
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+-------
+
+3. Apply the dash-admin-user configuration
+# kubectl apply -f dash-admin-user.yaml
+
+4. Create dash-clusterrole-yaml file
+-------
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: admin-user
+    namespace: kubernetes-dashboard
+-------
+
+5. Apply the ClusterRole configuration:
+# kubectl apply -f dash-clusterrole.yaml
+
+6.  In the terminal, run
+# kubectl proxy
+
+7. Visit the following URL in your browser to access your Dashboard:
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+8. Obtain the token for this user by running the following in your terminal:
+kubectl -n kubernetes-dashboard create token admin-user
