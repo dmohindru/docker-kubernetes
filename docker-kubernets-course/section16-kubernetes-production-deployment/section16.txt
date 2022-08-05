@@ -1,0 +1,15 @@
+Production deployment
+---------------------
+1. Create Github Repo
+2. Tie repo to Travis CI
+3. Create Google Cloud project
+4. Enable billing for the project
+5. Add deployment scripts to the repo
+
+Why Google cloud?
+-----------------
+1. Google created Kubernetes.
+2. AWS only recently got Kubernetes support.
+3. Far far easier to poke around Kubernetes on Google cloud.
+4. Excellent documentation for beginners.
+
