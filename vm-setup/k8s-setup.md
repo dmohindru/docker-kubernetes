@@ -14,3 +14,21 @@ kubeadm join 192.168.0.109:6443 --token f6imif.qbu86takd1cs4nfu \
  --discovery-token-ca-cert-hash sha256:a22454d9e12979cceadf0a203a8c0f7a46e84cef1b6756a2cc19a0a286e560b1
 
 kubeadm config images pull
+
+k3s setup
+Hostname setup
+sudo hostnamectl set-hostname k3s-control-plane
+sudo hostnamectl set-hostname k3s-worker-node1
+sudo hostnamectl set-hostname k3s-worker-node2
+
+On controlplane
+curl -sfL https://get.k3s.io | sh -
+
+Retrieve token on control plane
+sudo cat /var/lib/rancher/k3s/server/node-token
+
+On Worker nodes
+curl -sfL https://get.k3s.io | K3S_URL=https://<controlplane-ip>:6443 K3S_TOKEN=<token> sh -
+
+Verify cluster is running
+sudo k3s kubectl get nodes

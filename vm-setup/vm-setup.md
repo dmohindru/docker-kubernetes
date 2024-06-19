@@ -102,6 +102,63 @@ List IP of running vm
 VBoxManage guestproperty get vm-name /VirtualBox/GuestInfo/Net/0/V4/IP
 ```
 
+Configure static IP on a particular VM
+Follow [this link](https://chatgpt.com/c/cda21dad-b2fb-4eff-a0b3-c88cbb52c410)
+Create netplan file
+
+```shell
+sudo nano /etc/netplan/01-netcfg.yaml
+```
+
+Add following content to yaml file
+
+```yaml
+network:
+  version: 2
+  ethernets:
+    enp0s3: # Replace with your network interface name
+      dhcp4: no
+      addresses:
+        - 192.168.0.200/24 # Replace with your desired static IP and subnet
+      gateway4: 192.168.0.1 # Replace with your gateway
+```
+
+Apply configuration
+
+```shell
+sudo netplan apply
+```
+
+Check IP
+
+```shell
+ip a
+```
+
+Ping your gateway
+
+```shell
+ping -c 4 192.168.0.1
+```
+
+Check DNS resolution
+
+```shell
+ping -c 4 google.com
+```
+
+Troubleshooting: Ensure Netplan configuration file has correct permissions
+
+```shell
+sudo chmod 644 /etc/netplan/01-netcfg.yaml
+```
+
+Restart network services
+
+```shell
+sudo systemctl restart systemd-networkd
+```
+
 ### Resources
 
 - [How to set ssh public keys in remote server](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
