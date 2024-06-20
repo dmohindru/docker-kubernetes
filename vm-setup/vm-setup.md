@@ -67,6 +67,12 @@ Import/create a new vm from existing image
 VBoxManage import ~/Documents/vm-images/ubuntu-server.ova --vsys 0 --vmname "NewUbuntuVM" --basefolder ~/virtualbox
 ```
 
+Show status of vm
+
+```shell
+VBoxManage showvminfo vm-name
+```
+
 Install guest addition iso to retrieve ip or other details from a running vm
 
 Install get addition iso

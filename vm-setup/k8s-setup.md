@@ -32,3 +32,22 @@ curl -sfL https://get.k3s.io | K3S_URL=https://<controlplane-ip>:6443 K3S_TOKEN=
 
 Verify cluster is running
 sudo k3s kubectl get nodes
+
+steps
+
+1. Prepare VM
+
+- Create VM
+- Export VM (Snapshot)
+- Import VM (control plane, worker(s))
+- Set unique hostname on each VM
+- for control plane set static ip setting see vm-setup
+- for worker nodes modify /etc/hosts with ip address of their control plane IP
+
+2. Control plane setup
+
+3. Worker node setup
+
+4. Verify
+
+5. Setup kubectl on host pc

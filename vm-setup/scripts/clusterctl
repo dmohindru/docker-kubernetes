@@ -1,0 +1,164 @@
+#!/bin/bash
+
+# Function to display usage information
+usage() {
+    echo "Usage: $0 <cluster_name> <start|stop|pause|resume|info|ip|status>" >&2
+    exit 1
+}
+
+# Function to read cluster configuration
+read_cluster_config() {
+    local cluster_config_file="$1.conf"
+    if [ ! -f "$cluster_config_file" ]; then
+        echo "Cluster configuration file $cluster_config_file not found." >&2
+        exit 1
+    fi
+
+    CONTROL_PLANE_VM=$(grep "control_plane" "$cluster_config_file" | cut -d'=' -f2 | tr -d ' ')
+    WORKER_VMS=($(grep "worker" "$cluster_config_file" | cut -d'=' -f2 | tr -d ' '))
+}
+
+# VM Functions
+# Function to start a VM
+vm_start() {
+    local vmname="$1"
+    echo "Starting VM: $vmname"
+    VBoxManage startvm "$vmname" --type headless
+}
+
+# Function to stop a VM
+vm_stop() {
+    local vmname="$1"
+    echo "Stopping VM: $vmname"
+    VBoxManage controlvm "$vmname" acpipowerbutton
+}
+
+# Function to show status of VM
+vm_status() {
+    local vmname="$1"
+    echo "Status for VM: $vmname"
+    VBoxManage showvminfo "$vmname" | grep State
+}
+
+# Function to show IP of VM
+vm_ip() {
+    local vmname="$1"
+    echo "IP for VM: $vmname"
+    VBoxManage guestproperty get "$vmname" /VirtualBox/GuestInfo/Net/0/V4/IP
+}
+
+# Function to pause a VM
+vm_pause() {
+    local vmname="$1"
+    echo "Pausing VM: $vmname"
+    VBoxManage controlvm "$vmname" pause
+}
+
+# Function to resume a VM
+vm_resume() {
+    local vmname="$1"
+    echo "Resuming VM: $vmname"
+    VBoxManage controlvm "$vmname" resume
+}
+
+# Cluster functions
+# Function to display cluster information
+cluster_info() {
+    echo "Cluster Information:"
+    echo "Control Plane VM: $CONTROL_PLANE_VM"
+    echo "Worker VMs: ${WORKER_VMS[*]}"
+}
+
+# Function to start the cluster
+cluster_start() {
+    echo "Starting the cluster..."
+    vm_start "$CONTROL_PLANE_VM"
+    for vm in "${WORKER_VMS[@]}"; do
+        vm_start "$vm"
+    done
+    echo "Cluster started."
+}
+
+# Function to stop the cluster
+cluster_stop() {
+    echo "Stopping the cluster..."
+    vm_stop "$CONTROL_PLANE_VM"
+    for vm in "${WORKER_VMS[@]}"; do
+        vm_stop "$vm"
+    done
+    echo "Cluster stopped."
+}
+
+# Function to show IP(s) of a cluster
+cluster_ip() {
+    echo "Cluster IP info"
+    vm_ip "$CONTROL_PLANE_VM"
+    for vm in "${WORKER_VMS[@]}"; do
+        vm_ip "$vm"
+    done
+}
+
+# Function to pause a cluster
+cluster_pause() {
+    echo "Pausing cluster: $CLUSTER_NAME"
+    vm_pause "$CONTROL_PLANE_VM"
+    for vm in "${WORKER_VMS[@]}"; do
+        vm_pause "$vm"
+    done
+}
+
+# Function to resume a cluster
+cluster_resume() {
+    echo "Resuming cluster: $CLUSTER_NAME"
+    vm_resume "$CONTROL_PLANE_VM"
+    for vm in "${WORKER_VMS[@]}"; do
+        vm_resume "$vm"
+    done
+}
+
+# Function to display cluster status
+cluster_status() {
+    echo "Status for cluster: $CLUSTER_NAME"
+    vm_status "$CONTROL_PLANE_VM"
+    for vm in "${WORKER_VMS[@]}"; do
+        vm_status "$vm"
+    done
+}
+
+# Main script logic
+if [ $# -ne 2 ]; then
+    usage
+fi
+
+CLUSTER_NAME="$1"
+VERB="$2"
+CONFIG_FILE="$CLUSTER_NAME.conf"
+
+read_cluster_config "$CLUSTER_NAME"
+
+case "$VERB" in
+    start)
+        cluster_start
+        ;;
+    stop)
+        cluster_stop
+        ;;
+    pause)
+        cluster_pause
+        ;;
+    resume)
+        cluster_resume
+        ;;
+    info)
+        cluster_info
+        ;;
+    status)
+        cluster_status
+        ;;
+    ip)
+        cluster_ip
+        ;;
+    *)
+        usage
+        ;;
+esac
