@@ -29,9 +29,16 @@ sudo cat /var/lib/rancher/k3s/server/node-token
 
 On Worker nodes
 curl -sfL https://get.k3s.io | K3S_URL=https://<controlplane-ip>:6443 K3S_TOKEN=<token> sh -
+check k3s-agent status
+sudo systemctl status k3s-agent
 
 Verify cluster is running
 sudo k3s kubectl get nodes
+
+copy k3s.yaml file
+sudo cat /etc/rancher/k3s/k3s.yaml
+
+to host pc for kubectl command to work
 
 steps
 
