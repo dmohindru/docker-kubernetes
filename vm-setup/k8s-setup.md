@@ -1,60 +1,86 @@
-Tutorial
-https://medium.com/@rabbi.cse.sust.bd/kubernetes-cluster-setup-on-ubuntu-24-04-lts-server-c17be85e49d1
+# Introduction
 
-1. set hostname
+This wiki is about setting up a k3s cluster on vm or ec2 running ubuntu
 
-Read index
-Intitialize the Kubernetes cluster
+### VM setup
 
-kubeadm join 192.168.0.109:6443 --token f6imif.qbu86takd1cs4nfu \
- --discovery-token-ca-cert-hash sha256:a22454d9e12979cceadf0a203a8c0f7a46e84cef1b6756a2cc19a0a286e560b1 \
- --control-plane
+If running a cluster running on a VM make sure vm prepration is done properly. Bare minimum following things should be set
 
-kubeadm join 192.168.0.109:6443 --token f6imif.qbu86takd1cs4nfu \
- --discovery-token-ca-cert-hash sha256:a22454d9e12979cceadf0a203a8c0f7a46e84cef1b6756a2cc19a0a286e560b1
+1. Set hostname of each machine in a cluster. Try to give descriptive name to each machine in a cluster with their role like (control-plane, worker1, worker2, .... and so on)
 
-kubeadm config images pull
+```shell
+sudo hostnamectl set-hostname <cluster-machine-name>
+```
 
-k3s setup
-Hostname setup
-sudo hostnamectl set-hostname k3s-control-plane
-sudo hostnamectl set-hostname k3s-worker-node1
-sudo hostnamectl set-hostname k3s-worker-node2
+2. Its good to have static IP for each machine in cluster though not fully required but atleast control plane machine should have static IP allocated to them. Refer to [vm-setup](./vm-setup.md) **Configure static IP on a particular VM section** on how to do that
 
-On controlplane
+3. Make sure each machine can talk to each other using ping command
+
+```shell
+ping ip-of-machine
+```
+
+4. For worker nodes to talk to control plane using a descriptive name. Modify /etc/hosts on worker nodes with following content
+
+```shell
+sudo nano /etc/hosts
+<ip-of-control-plane> <descriptive-name-of-control-plane>
+```
+
+### k3s setup
+
+1. On control-plane machine run following command to install control plane software
+
+```shell
 curl -sfL https://get.k3s.io | sh -
+```
 
-Retrieve token on control plane
+2. Check status of control plnae
+
+```shell
+sudo systemctl status k3s
+```
+
+3. Retrieve node token so that worker nodes can join the cluster
+
+```shell
 sudo cat /var/lib/rancher/k3s/server/node-token
+```
 
-On Worker nodes
+4. On woker nodes run following command
+
+```shell
 curl -sfL https://get.k3s.io | K3S_URL=https://<controlplane-ip>:6443 K3S_TOKEN=<token> sh -
-check k3s-agent status
+```
+
+5. Check status of k3s-agent on worker nodes
+
+```shell
 sudo systemctl status k3s-agent
+```
 
-Verify cluster is running
+6. Verify cluster status on control plane node
+
+```shell
 sudo k3s kubectl get nodes
+```
 
-copy k3s.yaml file
+### kubectl setup
+
+1. Install kubectl on your host pc. Just google it.
+
+2. On each control plane node extract its cluster config with following command and copy to convinient location preferable at ~/.kube as k3s-cluster1.yaml, k3s-cluster2.yaml ... and so on.
+
+```shell
 sudo cat /etc/rancher/k3s/k3s.yaml
+```
 
-to host pc for kubectl command to work
+3. Merge these config file to one config file stored at ~/.kube/config manually or by kubectl commands. There are many tutorial like [this one](https://dev.to/akyriako/merge-multiple-kubeconfig-files-20gb) but it didn't work for me. I did it manually.
 
-steps
+### Tutorials
 
-1. Prepare VM
-
-- Create VM
-- Export VM (Snapshot)
-- Import VM (control plane, worker(s))
-- Set unique hostname on each VM
-- for control plane set static ip setting see vm-setup
-- for worker nodes modify /etc/hosts with ip address of their control plane IP
-
-2. Control plane setup
-
-3. Worker node setup
-
-4. Verify
-
-5. Setup kubectl on host pc
+- [K8s setup tutorial 1](https://rudimartinsen.com/2023/12/29/kubernetes-cluster-on-vms-2024/)
+- [K8s setup tutorial 2](https://medium.com/@rabbi.cse.sust.bd/kubernetes-cluster-setup-on-ubuntu-24-04-lts-server-c17be85e49d1)
+- [K3s setup](https://www.linuxtechi.com/install-kubernetes-using-k3s-on-ubuntu/)
+- [Chat GPT wiki](https://chatgpt.com/c/149ec8bb-f53f-4f94-a379-ceb87bf4c74f)
+- [Merge multiple cluster config file into one](https://dev.to/akyriako/merge-multiple-kubeconfig-files-20gb)

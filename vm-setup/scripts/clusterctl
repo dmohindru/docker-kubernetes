@@ -8,7 +8,7 @@ usage() {
 
 # Function to read cluster configuration
 read_cluster_config() {
-    local cluster_config_file="$1.conf"
+    local cluster_config_file="/home/dhruv/opt/bin/$1.conf"
     if [ ! -f "$cluster_config_file" ]; then
         echo "Cluster configuration file $cluster_config_file not found." >&2
         exit 1
