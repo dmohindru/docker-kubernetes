@@ -10,9 +10,19 @@ This guide provides step-by-step instructions to set up a local root Certificate
 
    - Generate a private key for your root CA. This key will be used to sign certificates.
 
+   ```shell
+   openssl genrsa -out rootCA.key 2048
+   ```
+
 2. **Generate a Root Certificate**:
+
    - Create a self-signed certificate for your root CA using the private key.
    - This certificate will act as the "trusted root" in your network.
+
+   ```shell
+   openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
+
+   ```
 
 ---
 
@@ -25,9 +35,18 @@ This guide provides step-by-step instructions to set up a local root Certificate
      - **Windows**: Use the Certificate Manager (`certmgr.msc`) to import into "Trusted Root Certification Authorities."
      - **macOS**: Use the Keychain Access app to add it to the "System" keychain.
      - **Browsers (Optional)**: Some browsers, like Firefox, may require manual configuration.
+     ```shell
+     sudo cp rootCA.crt /usr/local/share/ca-certificates/
+     sudo update-ca-certificates
+     ```
 
 2. **Verify the Installation**:
+
    - Test by viewing the certificate in the trusted authorities list on the devices.
+
+   ```shell
+   openssl x509 -in /usr/local/share/ca-certificates/rootCA.crt -text -noout
+   ```
 
 ---
 
@@ -37,12 +56,50 @@ This guide provides step-by-step instructions to set up a local root Certificate
 
    - Create a private key specific to your domain (e.g., `mycooldomain.key`).
 
+   ```shell
+   openssl genrsa -out k3s-cluster1.local.key 2048
+   ```
+
 2. **Create a Certificate Signing Request (CSR)**:
 
    - Generate a CSR for your domain, specifying details like the common name (e.g., `mycooldomain`).
 
+   ```shell
+   openssl req -new -key k3s-cluster1.local.key -out k3s-cluster1.local.csr -config wildcard-openssl.cnf
+   ```
+
 3. **Sign the Certificate with Your Root CA**:
    - Use your root CA’s private key to sign the CSR and issue a certificate (e.g., `mycooldomain.crt`).
+   ```shell
+   openssl x509 -req -in k3s-cluster1.local.csr -CA dmohindruCA.cert -CAkey dmohindruCA.key -CAcreateserial -out k3s-cluster1.local.crt -days 365 -extensions v3_req -extfile wildcard-openssl.cnf
+   ```
+4. **Verify the Generated Certificate**:
+   ```shell
+   openssl x509 -in k3s-cluster1.local.crt -text -noout
+   ```
+5. **Openssl config file format**
+
+   ```openssl config
+   [ req ]
+   distinguished_name = req_distinguished_name
+   req_extensions = v3_req
+   prompt = no
+
+   [ req_distinguished_name ]
+   C = AU
+   ST = New South Wales
+   L = The Ponds
+   O = k3s-cluster1-local
+   OU = development
+   CN = \*.k3s-cluster1.local
+
+   [ v3_req ]
+   subjectAltName = @alt_names
+
+   [ alt_names ]
+   DNS.1 = \*.k3s-cluster1.local
+   DNS.2 = k3s-cluster1.local
+   ```
 
 ---
 
