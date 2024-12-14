@@ -71,7 +71,7 @@ This guide provides step-by-step instructions to set up a local root Certificate
 3. **Sign the Certificate with Your Root CA**:
    - Use your root CA’s private key to sign the CSR and issue a certificate (e.g., `mycooldomain.crt`).
    ```shell
-   openssl x509 -req -in k3s-cluster1.local.csr -CA dmohindruCA.cert -CAkey dmohindruCA.key -CAcreateserial -out k3s-cluster1.local.crt -days 365 -extensions v3_req -extfile wildcard-openssl.cnf
+   openssl x509 -req -in k3s-cluster1.local.csr -CA dmohindruCA.crt -CAkey dmohindruCA.key -CAcreateserial -out k3s-cluster1.local.crt -days 365 -extensions v3_req -extfile wildcard-openssl.cnf
    ```
 4. **Verify the Generated Certificate**:
    ```shell
@@ -97,7 +97,7 @@ This guide provides step-by-step instructions to set up a local root Certificate
    subjectAltName = @alt_names
 
    [ alt_names ]
-   DNS.1 = \*.k3s-cluster1.local
+   DNS.1 = *.k3s-cluster1.local
    DNS.2 = k3s-cluster1.local
    ```
 
@@ -109,7 +109,16 @@ This guide provides step-by-step instructions to set up a local root Certificate
 
    - Place the domain certificate (`mycooldomain.crt`) and private key (`mycooldomain.key`) in a secure directory on your server.
 
+   ```shell
+   sudo cp yourdomain.crt /etc/ssl/mydomain/
+   sudo cp yourdomain.key /etc/ssl/mydomain/
+   ```
+
 2. **Update the Web Server Configuration**:
+
+   ```shell
+   sudo nano /etc/apache2/sites-available/yourdomain.conf
+   ```
 
    - For **Apache**:
      ```apache
@@ -120,18 +129,19 @@ This guide provides step-by-step instructions to set up a local root Certificate
          SSLCertificateKeyFile /path/to/mycooldomain.key
      </VirtualHost>
      ```
-   - For **Nginx**:
-     ```nginx
-     server {
-         listen 443 ssl;
-         server_name mycooldomain;
-         ssl_certificate /path/to/mycooldomain.crt;
-         ssl_certificate_key /path/to/mycooldomain.key;
-     }
-     ```
 
-3. **Restart the Server**:
+3. **Disable the non-SSL site and enable the SSL site:**:
+
+   ```shell
+   sudo a2dissite 000-default.conf
+   sudo a2ensite yourdomain.conf
+   ```
+
+4. **Restart the Server**:
    - Reload or restart the server to apply the changes.
+   ```shell
+   sudo systemctl restart apache2
+   ```
 
 ---
 
