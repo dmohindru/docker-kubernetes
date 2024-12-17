@@ -11,7 +11,7 @@ This guide provides step-by-step instructions to set up a local root Certificate
    - Generate a private key for your root CA. This key will be used to sign certificates.
 
    ```shell
-   openssl genrsa -out rootCA.key 2048
+   openssl genrsa -des3 -out rootCA.key 2048
    ```
 
 2. **Generate a Root Certificate**:
@@ -65,40 +65,39 @@ This guide provides step-by-step instructions to set up a local root Certificate
    - Generate a CSR for your domain, specifying details like the common name (e.g., `mycooldomain`).
 
    ```shell
-   openssl req -new -key k3s-cluster1.local.key -out k3s-cluster1.local.csr -config wildcard-openssl.cnf
+   openssl req -new -key k3s-cluster1.local.key -out k3s-cluster1.local.csr
    ```
 
 3. **Sign the Certificate with Your Root CA**:
    - Use your root CA’s private key to sign the CSR and issue a certificate (e.g., `mycooldomain.crt`).
    ```shell
-   openssl x509 -req -in k3s-cluster1.local.csr -CA dmohindruCA.crt -CAkey dmohindruCA.key -CAcreateserial -out k3s-cluster1.local.crt -days 365 -extensions v3_req -extfile wildcard-openssl.cnf
+   openssl x509 -req -in k3s-cluster1.local.csr -CA dmohindruCA.crt -CAkey dmohindruCA.key -CAcreateserial -out k3s-cluster1.local.crt -days 365 -sha256 -extfile k3s-cluster1.local.ext
    ```
 4. **Verify the Generated Certificate**:
+
    ```shell
    openssl x509 -in k3s-cluster1.local.crt -text -noout
    ```
-5. **Openssl config file format**
+
+5. **Verify if Generated Certificate passes chain of trust**:
+
+   ```shell
+   openssl verify -CAfile <root-ca-file> <certificate-file>
+
+   ```
+
+6. **Openssl config file format**
 
    ```openssl config
-   [ req ]
-   distinguished_name = req_distinguished_name
-   req_extensions = v3_req
-   prompt = no
-
-   [ req_distinguished_name ]
-   C = AU
-   ST = New South Wales
-   L = The Ponds
-   O = k3s-cluster1-local
-   OU = development
-   CN = \*.k3s-cluster1.local
-
-   [ v3_req ]
+   authorityKeyIdentifier=keyid,issuer
+   basicConstraints=CA:FALSE
+   keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
    subjectAltName = @alt_names
 
-   [ alt_names ]
-   DNS.1 = *.k3s-cluster1.local
-   DNS.2 = k3s-cluster1.local
+   [alt_names]
+   DNS.1 = \*.cluster2
+   DNS.2 = cluster2
+
    ```
 
 ---
@@ -107,12 +106,12 @@ This guide provides step-by-step instructions to set up a local root Certificate
 
 1. **Install the Certificate and Key**:
 
-   - Place the domain certificate (`mycooldomain.crt`) and private key (`mycooldomain.key`) in a secure directory on your server.
+- Place the domain certificate (`mycooldomain.crt`) and private key (`mycooldomain.key`) in a secure directory on your server.
 
-   ```shell
-   sudo cp yourdomain.crt /etc/ssl/mydomain/
-   sudo cp yourdomain.key /etc/ssl/mydomain/
-   ```
+```shell
+sudo cp yourdomain.crt /etc/ssl/mydomain/
+sudo cp yourdomain.key /etc/ssl/mydomain/
+```
 
 2. **Update the Web Server Configuration**:
 
@@ -191,3 +190,7 @@ This guide provides step-by-step instructions to set up a local root Certificate
 - Ensure your root CA private key is securely stored and not accessible to unauthorized users.
 - Use tools like `mkcert` for simpler setups if manual configurations seem too complex.
 - Always test your setup in a secure, isolated environment before rolling it out across devices.
+
+### Links
+
+- **[Nice tutorial on setting up rootCA locally](https://deliciousbrains.com/ssl-certificate-authority-for-local-https-development/)**
